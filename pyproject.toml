@@ -7,11 +7,24 @@ authors = [
     { name = "William C Grisaitis", email = "wgrisaitis@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=1.16.1",
+    "pre-commit>=4.2.0",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "ruff>=0.12.0",
+]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.mypy]
+install_types = true
+non_interactive = true
 
 [tool.ruff]
 target-version = "py312"

@@ -14,14 +14,21 @@ fi
 
 # Install dependencies
 if [ -f "pyproject.toml" ]; then
+    echo "calling uv sync..."
     uv sync --all-extras
+    echo "calling uv run pre-commit install..."
     uv run pre-commit install
 fi
 
-# Setup git aliases (works locally and in containers)
-if [ ! -f ~/.gitalias ]; then
-    curl -sSL https://raw.githubusercontent.com/GitAlias/gitalias/main/gitalias.txt > ~/.gitalias
-    git config --global include.path ~/.gitalias
+# Setup git aliases (only in codespaces containers)
+if [ "$CODESPACES" = "true" ]; then
+    echo "Setting up git aliases..."
+    if [ ! -f ~/.gitalias ]; then
+        curl -sSL https://raw.githubusercontent.com/GitAlias/gitalias/main/gitalias.txt > ~/.gitalias
+        echo "Created ~/.gitalias with default git aliases."
+        echo $(ls -l ~/.gitalias)
+        git config --global include.path ~/.gitalias
+    fi
 fi
 
 echo "✅ Ready to develop!"

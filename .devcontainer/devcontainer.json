@@ -19,5 +19,8 @@
     },
 
     "postCreateCommand": "./scripts/setup_dev_environment.sh",
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "containerEnv": {
+        "UV_LINK_MODE": "copy"
+    }
 }
