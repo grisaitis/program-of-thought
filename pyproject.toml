@@ -1,0 +1,14 @@
+[project]
+name = "program-of-thought"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "William C Grisaitis", email = "wgrisaitis@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
