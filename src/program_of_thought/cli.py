@@ -1,8 +1,11 @@
 import argparse
+import logging
 import sys
 
-from .core import greet
+from .core import greet, test_lm
 from .program_of_thought import program_of_thought
+
+logger = logging.getLogger()
 
 
 def main():
@@ -10,12 +13,24 @@ def main():
 
     args = parser.parse_args()
 
+    logging.basicConfig(
+        level=args.logging_level,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+
+    logger.debug("Parsed arguments: %s", args)
+
     if args.command == "greet":
         result = greet(args.name, args.uppercase)
         print(result)
-    elif args.command == "program_of_thought":
+    elif args.command == "ask":
         result = program_of_thought(args.prompt)
         print(result)
+    elif args.command == "test-lm":
+        result = test_lm()
+        print(result)
+    else:
+        raise ValueError(f"Unknown command: {args.command}")
 
 
 def create_arg_parser() -> argparse.ArgumentParser:
@@ -24,24 +39,18 @@ def create_arg_parser() -> argparse.ArgumentParser:
         prog="program-of-thought",
         description="Program of Thought CLI",
     )
+    parser.add_argument(
+        "--logging-level", type=str, default="INFO", help="Python logging level"
+    )
+
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    greet_parser = subparsers.add_parser("greet", help="Greet a user")
-    greet_parser.add_argument("name", type=str, help="Name of the user to greet")
-    greet_parser.add_argument(
-        "--uppercase", action="store_true", help="Convert greeting to uppercase"
-    )
+    # subcommand: test-lm
+    subparsers.add_parser("test-lm", help="Test the language model")
 
+    # subcommand: ask
     ask_parser = subparsers.add_parser("ask", help="Ask a question")
     ask_parser.add_argument("prompt", type=str, help="Prompt to ask")
-
-    parser.add_argument(
-        "--logging-level",
-        type=str,
-        default="INFO",
-        help="Set logging level",
-        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-    )
 
     return parser
 
