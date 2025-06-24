@@ -7,6 +7,10 @@ authors = [
     { name = "William C Grisaitis", email = "wgrisaitis@gmail.com" }
 ]
 requires-python = ">=3.12"
+dependencies = [
+    "dspy>=2.6.27",
+    "python-dotenv>=1.1.1",
+]
 
 [dependency-groups]
 dev = [
@@ -34,3 +38,6 @@ line-length = 88
 [tool.ruff.format]
 indent-style = "space"
 line-ending = "auto"
+
+[project.scripts]
+program-of-thought = "program_of_thought.cli:main"
