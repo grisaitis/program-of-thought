@@ -27,5 +27,15 @@
 
     "files.associations": {
         "*.toml": "toml"
+    },
+
+    "mcp": {
+        "inputs": [],
+        "servers": {
+            "context7": {
+            "type": "http",
+            "url": "https://mcp.context7.com/mcp"
+            }
+        }
     }
 }
