@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 
-from .core import greet, test_lm
+from .core import test_lm
 from .program_of_thought import program_of_thought
 
 logger = logging.getLogger()
@@ -20,10 +20,7 @@ def main():
 
     logger.debug("Parsed arguments: %s", args)
 
-    if args.command == "greet":
-        result = greet(args.name, args.uppercase)
-        print(result)
-    elif args.command == "ask":
+    if args.command == "ask":
         result = program_of_thought(args.prompt)
         print(result)
     elif args.command == "test-lm":

@@ -4,12 +4,6 @@ import dspy
 from dotenv import load_dotenv
 
 
-def greet(name: str, uppercase: bool = False) -> str:
-    """Core functionality - greeting function"""
-    greeting = f"Hello, {name}!"
-    return greeting.upper() if uppercase else greeting
-
-
 def test_lm() -> str:
     load_dotenv()
     lm = dspy.LM(
