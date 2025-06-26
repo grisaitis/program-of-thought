@@ -5,6 +5,9 @@
 set -e  # Exit on error
 echo "🚀 Bootstrapping development environment..."
 
+# Navigate to project root
+cd $(git rev-parse --show-toplevel)
+
 # Install uv if not present
 if ! command -v uv &> /dev/null; then
     echo "Installing uv..."
@@ -18,6 +21,8 @@ if [ -f "pyproject.toml" ]; then
     uv sync --all-extras
     echo "calling uv run pre-commit install..."
     uv run pre-commit install
+    echo "checking secrets baseline..."
+    ./scripts/create_or_update_baseline_secrets.sh
 fi
 
 # Setup git aliases (only in codespaces containers)
