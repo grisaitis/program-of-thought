@@ -2,10 +2,13 @@ import argparse
 import logging
 import sys
 
-from .core import test_lm
-from .program_of_thought import program_of_thought
+from .code_execution import execute_code
+from .core import run_program_of_thought
+from .evaluation import optimize_program_and_save
+from .other import test_lm
+from .utils import setup_logging
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -13,19 +16,25 @@ def main():
 
     args = parser.parse_args()
 
-    logging.basicConfig(
-        level=args.logging_level,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
+    setup_logging(args.logging_level)
 
     logger.debug("Parsed arguments: %s", args)
 
     if args.command == "ask":
-        result = program_of_thought(args.prompt)
+        result = run_program_of_thought(args.prompt)
         print(result)
     elif args.command == "test-lm":
         result = test_lm()
         print(result)
+    elif args.command == "eval":
+        result = optimize_program_and_save()
+        print(result)
+    elif args.command == "code-execution":
+        if not args.code:
+            raise ValueError("Code argument is required for code-execution command.")
+        stdout, stderr = execute_code(args.code)
+        print("STDOUT:", stdout)
+        print("STDERR:", stderr)
     else:
         raise ValueError(f"Unknown command: {args.command}")
 
@@ -41,14 +50,12 @@ def create_arg_parser() -> argparse.ArgumentParser:
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
-
-    # subcommand: test-lm
     subparsers.add_parser("test-lm", help="Test the language model")
-
-    # subcommand: ask
     ask_parser = subparsers.add_parser("ask", help="Ask a question")
     ask_parser.add_argument("prompt", type=str, help="Prompt to ask")
-
+    subparsers.add_parser("evaluation")
+    parser_code_execution = subparsers.add_parser("code-execution")
+    parser_code_execution.add_argument("code")
     return parser
 
 
